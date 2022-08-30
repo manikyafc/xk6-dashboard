@@ -64,6 +64,15 @@ export class SampleSource extends EventSource {
     return all;
   }
 
+  clear() {
+    this.lengh = 0;
+    this.time = [];
+    for (const key of Object.keys(this.sample)) {
+      this.sample[key] = [];
+    }
+    this.dispatchEvent(new Event("sample"));
+  }
+
   _onmessage(event) {
     // check pending metrics metadata
     if (this._peding) {

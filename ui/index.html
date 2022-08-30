@@ -11,8 +11,43 @@
       <nav>
         <div class="nav-wrapper">
           <a class="brand-logo center">k6 dashboard</a>
+          <ul class="right">
+            <li><a id="clear" href="#">Clear</a></li>
+            <li><a id="settings" class="modal-trigger" href="#dialog">Settings</a></li>
+          </ul>
         </div>
       </nav>
+    </div>
+    <div id="dialog" class="modal">
+      <form id="settings-form">
+        <div class="modal-content">
+          <div class="row">
+            <h5>Settings</h5>
+          </div>
+          <div class="row">
+            <div class="col s12">
+              <div class="row">
+                <div class="input-field col s6">
+                  <input value="12" name="vus" min="0" max="500" type="number" class="validate" />
+                  <label for="vus">Virtual Users</label>
+                </div>
+                <div class="input-field col s6">
+                  <input disabled value="33" id="max_vus" type="text" />
+                  <label for="max_vus">Max Virtual Users</label>
+                </div>
+              </div>
+              <div class="row"></div>
+              <div class="row">
+                <p class="range-field s12"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="modal-close waves-effect btn-flat">Cancel</a>
+          <button class="waves-effect btn-flat">Done</button>
+        </div>
+      </form>
     </div>
     <section>
       <div class="row">
@@ -22,8 +57,14 @@
     <script type="module">
       import { SampleSource, SimpleChart } from "./index.js";
 
+      function update(event) {
+        console.log(event);
+      }
+
       addEventListener("DOMContentLoaded", () => {
-        const endpoint = new URLSearchParams(window.location.search).get("endpoint") || "http://127.0.0.1:5665/";
+        const params = new URLSearchParams(window.location.search);
+        const endpoint = params.get("endpoint") || "http://127.0.0.1:5665/";
+        const api = params.get("api") || "http://127.0.0.1:6565/";
         const src = new SampleSource(`${endpoint}events/sample`);
         new SimpleChart(src, { title: "Virtual Users" }, "vus");
         new SimpleChart(
@@ -35,6 +76,17 @@
           "http_req_duration_current"
         );
         new SimpleChart(src, { title: "Request Rate (1/s)" }, "http_reqs_rate");
+
+        document.getElementById("clear").onclick = () => {
+          src.clear();
+          return false;
+        };
+
+        document.getElementById("settings-form").onsubmit = (even) => {
+          console.log(event.target[0].value);
+          M.Modal.getInstance(event.target.parentNode).close();
+          return false;
+        };
       });
     </script>
     <style>
@@ -47,6 +99,12 @@
       nav {
         background: #7b65fa;
         height: 40px;
+      }
+
+      nav ul {
+        height: 40px;
+        padding: 0 5px;
+        line-height: 40px;
       }
 
       body {
