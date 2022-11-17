@@ -44,7 +44,7 @@ tasks:
     generates:
       - k6
     cmds:
-      - xk6 build --with github.com/szkiba/xk6-dashboard=$(pwd)
+      - xk6 build --with github.com/manikyafc/xk6-dashboard=$(pwd)
 
   test:
     deps: [build]

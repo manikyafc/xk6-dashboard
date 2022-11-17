@@ -12,3 +12,5 @@ require (
 	go.k6.io/k6 v0.32.0
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 )
+
+replace github.com/szkiba/xk6-dashboard => github.com/manikyafc/xk6-dashboard latest
